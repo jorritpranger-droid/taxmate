@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(Test-Path \"C:\\\\Program Files\\\\nodejs\\\\node.exe\"; Test-Path \"C:\\\\Program Files \\(x86\\)\\\\nodejs\\\\node.exe\"; Get-ChildItem \"$env:APPDATA\\\\npm\" -ErrorAction SilentlyContinue | Select-Object -First 3)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\nodejs;\" + $env:PATH; cd \"C:\\\\Users\\\\jpran\\\\OneDrive\\\\Desktop\\\\taxmate\\\\client\"; npm install 2>&1 | Select-Object -Last 8)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\nodejs;\" + $env:PATH; cd \"C:\\\\Users\\\\jpran\\\\OneDrive\\\\Desktop\\\\taxmate\\\\server\"; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"`$env:PATH = 'C:\\\\Program Files\\\\nodejs;' + `$env:PATH; cd 'C:\\\\Users\\\\jpran\\\\OneDrive\\\\Desktop\\\\taxmate\\\\server'; node index.js\" -WindowStyle Normal)",
+      "PowerShell(Stop-Process -Id \\(Get-NetTCPConnection -LocalPort 3001 -State Listen\\).OwningProcess -Force)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\nodejs;\" + $env:PATH; $pm2 = \"C:\\\\Users\\\\jpran\\\\AppData\\\\Roaming\\\\npm\\\\pm2.cmd\"; cd \"C:\\\\Users\\\\jpran\\\\OneDrive\\\\Desktop\\\\taxmate\\\\server\"; & $pm2 start index.js --name taxmate-server; & $pm2 save)"
+    ]
+  }
+}

@@ -1,0 +1,236 @@
+#taxmate-panel {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  width: 360px;
+  height: calc(100vh - 60px);
+  background: #FFFFFF;
+  border-left: 1px solid #D0DAE8;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.10);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  font-size: 14px;
+  color: #1A2C42;
+  transition: transform 0.2s ease;
+}
+
+#taxmate-panel.hidden {
+  transform: translateX(100%);
+}
+
+#taxmate-header {
+  background: linear-gradient(135deg, #1D4E89, #2563AB);
+  color: white;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+#taxmate-header h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#taxmate-close {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 4px;
+  opacity: 0.8;
+}
+
+#taxmate-close:hover { opacity: 1; }
+
+#taxmate-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+#taxmate-toggle-btn {
+  position: fixed;
+  top: 120px;
+  right: 0;
+  background: linear-gradient(135deg, #1D4E89, #2563AB);
+  color: white;
+  border: none;
+  border-radius: 8px 0 0 8px;
+  padding: 10px 8px;
+  cursor: pointer;
+  z-index: 9998;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 12px;
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  letter-spacing: 0.5px;
+  box-shadow: -2px 2px 8px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tm-btn {
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.tm-btn-primary {
+  background: linear-gradient(135deg, #1D4E89, #2563AB);
+  color: white;
+}
+
+.tm-btn-primary:hover { opacity: 0.9; }
+.tm-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.tm-btn-success {
+  background: linear-gradient(135deg, #166534, #16A34A);
+  color: white;
+}
+
+.tm-btn-ghost {
+  background: none;
+  border: 1px solid #C0CFDF;
+  color: #4A6080;
+}
+
+.tm-item {
+  background: #F4F6F9;
+  border: 1px solid #D0DAE8;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.tm-item-vendor {
+  font-weight: 600;
+  color: #1A2C42;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.tm-item-amount {
+  color: #166534;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.tm-item-meta {
+  color: #7A90A8;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.tm-item-notes {
+  background: #FFFBEB;
+  border-left: 3px solid #D97706;
+  padding: 6px 10px;
+  border-radius: 0 4px 4px 0;
+  font-size: 12px;
+  color: #92400E;
+  margin-bottom: 8px;
+}
+
+.tm-conf {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.tm-conf-high   { background: #DCFCE7; color: #166534; }
+.tm-conf-medium { background: #FEF9C3; color: #854D0E; }
+.tm-conf-low    { background: #FEE2E2; color: #DC2626; }
+
+.tm-select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #C0CFDF;
+  border-radius: 4px;
+  font-size: 12px;
+  background: white;
+  color: #1A2C42;
+  margin-bottom: 8px;
+}
+
+.tm-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #C0CFDF;
+  border-radius: 4px;
+  font-size: 12px;
+  background: white;
+  color: #1A2C42;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.tm-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.tm-actions .tm-btn {
+  flex: 1;
+  margin-bottom: 0;
+  padding: 7px 10px;
+  font-size: 12px;
+}
+
+.tm-status {
+  text-align: center;
+  padding: 24px 16px;
+  color: #7A90A8;
+}
+
+.tm-status .tm-icon { font-size: 32px; margin-bottom: 8px; }
+
+.tm-success-banner {
+  background: #DCFCE7;
+  border: 1px solid #86EFAC;
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: #166534;
+  font-size: 13px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.tm-fy-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #C0CFDF;
+  border-radius: 6px;
+  font-size: 13px;
+  background: white;
+  color: #1A2C42;
+  margin-bottom: 12px;
+}
+
+.tm-label {
+  font-size: 11px;
+  color: #7A90A8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  display: block;
+}

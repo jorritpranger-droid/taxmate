@@ -1,0 +1,7 @@
+node_modules/
+server/.env
+server/ecosystem.config.cjs
+data/
+client/build/
+.DS_Store
+*.log
