@@ -82,6 +82,11 @@ const S = {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const fmt = (n) => `$${parseFloat(n || 0).toFixed(2)}`;
+const fmtDate = (d) => {
+  if (!d) return '';
+  const [y, m, day] = d.split('-');
+  return y && m && day ? `${day}/${m}/${y}` : d;
+};
 const getCat = (id, extra = []) => [...CATEGORIES, ...extra].find(c => c.id === id) || { label: id, icon: '📌', color: '#94A3B8' };
 
 // ─── Toast ────────────────────────────────────────────────────────────────────
@@ -238,7 +243,7 @@ function EmailList({ onAnalyse, analysedIds, activeAccount, financialYear, onScr
               }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ color: '#0A0F1A', fontWeight: 600, marginBottom: 3, fontSize: 15 }}>{email.subject || '(no subject)'}</div>
-                  <div style={{ color: '#4A6080', fontSize: 13 }}>{email.from} · {new Date(email.date).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+                  <div style={{ color: '#4A6080', fontSize: 13 }}>{email.from} · {new Date(email.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</div>
                   <div style={{ color: '#7A90A8', fontSize: 13, marginTop: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email.snippet}</div>
                 </div>
                 <button
@@ -713,7 +718,7 @@ export default function App() {
                     const cat = getCat(entry.category, customCats);
                     return (
                       <tr key={entry.id} style={{ borderBottom: '1px solid #EEF1F5' }}>
-                        <td style={{ ...S.td, color: '#4A6080', whiteSpace: 'nowrap' }}>{entry.date}</td>
+                        <td style={{ ...S.td, color: '#4A6080', whiteSpace: 'nowrap' }}>{fmtDate(entry.date)}</td>
                         <td style={{ ...S.td, color: '#1A2C42', fontWeight: 600 }}>{entry.vendor}</td>
                         <td style={{ ...S.td, color: '#4A6080', maxWidth: 220 }}>{entry.description}</td>
                         <td style={S.td}>
