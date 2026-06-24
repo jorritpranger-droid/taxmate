@@ -9,9 +9,12 @@ import fs from 'fs';
 import path from 'path';
 import pg from 'pg';
 
-// Load .env for local development
+// Resolve this file's directory in a cross-machine-safe way (works on Windows and Unix)
+const __serverDir = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'));
+
+// Load .env for local development (relative to this file, works on any machine)
 if (process.env.NODE_ENV !== 'production') {
-  dotenv.config({ path: 'C:\\Users\\jpran\\OneDrive\\Desktop\\taxmate\\server\\.env' });
+  dotenv.config({ path: path.join(__serverDir, '.env') });
 }
 
 const app = express();
@@ -82,7 +85,7 @@ app.use(session({
 
 // Serve React build in production
 if (IS_PROD) {
-  const clientBuild = path.join(path.dirname(new URL(import.meta.url).pathname.slice(1)), '..', 'client', 'build');
+  const clientBuild = path.join(__serverDir, '..', 'client', 'build');
   app.use(express.static(clientBuild));
 }
 
@@ -367,7 +370,7 @@ app.post('/analyse', requireAuth, async (req, res) => {
 });
 
 // ─── Entries Storage ───────────────────────────────────────────────────────────
-const LOCAL_DATA_FILE = 'C:\\Users\\jpran\\OneDrive\\Desktop\\taxmate\\data\\entries.json';
+const LOCAL_DATA_FILE = path.join(__serverDir, '..', 'data', 'entries.json');
 
 async function readEntries(req) {
   const email = getActiveEmail(req);
@@ -420,7 +423,7 @@ app.get('/health', (req, res) => res.json({ status: 'ok' }));
 // Serve React app for all other routes in production
 if (IS_PROD) {
   app.get('*', (req, res) => {
-    const clientBuild = path.join(path.dirname(new URL(import.meta.url).pathname.slice(1)), '..', 'client', 'build');
+    const clientBuild = path.join(__serverDir, '..', 'client', 'build');
     res.sendFile(path.join(clientBuild, 'index.html'));
   });
 }

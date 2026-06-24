@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 title TaxMate Setup
 color 0B
 echo.
