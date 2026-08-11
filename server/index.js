@@ -355,7 +355,12 @@ app.post('/analyse', requireAuth, async (req, res) => {
       messages: [{ role: 'user', content: `Analyse this email for Australian tax return items:\n\nFrom: ${from}\nSubject: ${subject}\nDate: ${date}\n\nBody:\n${body}` }],
     });
     const text = message.content.map((c) => c.text || '').join('');
-    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+    const cleaned = text.replace(/```json|```/g, '').trim();
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return res.json({ items: [], suggested_categories: [], summary: 'No tax-relevant items found in this email.' });
+    }
+    const parsed = JSON.parse(jsonMatch[0]);
     parsed.items = parsed.items.map((item, i) => ({
       ...item,
       id: `${emailId}_${i}_${Date.now()}`,

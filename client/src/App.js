@@ -401,6 +401,16 @@ export default function App() {
     setTimeout(() => setToast(null), 3500);
   };
 
+  // Two ways an unreachable backend shows up here:
+  //  - fetch() itself throws TypeError ("Failed to fetch") when the dev server can't connect at all
+  //  - the CRA dev proxy is up but the backend isn't, so it returns a "Proxy error" text
+  //    body instead of JSON, and res.json() throws a SyntaxError
+  // Both mean the same thing for this app: the backend (npm start in /server) isn't running.
+  const networkErrorMessage = (err) =>
+    err instanceof TypeError || err.name === 'SyntaxError'
+      ? "Can't reach the TaxMate server — make sure it's running (npm start in the server folder, port 3001)."
+      : 'Something went wrong: ' + err.message;
+
   const loadAuth = useCallback(() => {
     fetch(`${API}/auth/me`, { credentials: 'include' })
       .then(r => r.json())
@@ -427,34 +437,50 @@ export default function App() {
   }, [loadAuth]);
 
   const handleExtensionToken = async () => {
-    const res = await fetch(`${API}/auth/extension-token`, { method: 'POST', credentials: 'include' });
-    const data = await res.json();
-    setExtensionToken(data.token);
+    try {
+      const res = await fetch(`${API}/auth/extension-token`, { method: 'POST', credentials: 'include' });
+      const data = await res.json();
+      setExtensionToken(data.token);
+    } catch (err) {
+      showToast(networkErrorMessage(err), 'error');
+    }
   };
 
   const handleAddAccount = async () => {
-    const res = await fetch(`${API}/auth/url`);
-    const { url } = await res.json();
-    window.location.href = url;
+    try {
+      const res = await fetch(`${API}/auth/url`);
+      const { url } = await res.json();
+      window.location.href = url;
+    } catch (err) {
+      showToast(networkErrorMessage(err), 'error');
+    }
   };
 
   const handleSwitchAccount = async (email) => {
-    await fetch(`${API}/auth/switch`, {
-      method: 'POST', credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    });
-    setActiveAccount(email);
-    setAnalysedIds(new Set());
+    try {
+      await fetch(`${API}/auth/switch`, {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      setActiveAccount(email);
+      setAnalysedIds(new Set());
+    } catch (err) {
+      showToast(networkErrorMessage(err), 'error');
+    }
   };
 
   const handleLogout = async (email) => {
-    await fetch(`${API}/auth/logout`, {
-      method: 'POST', credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    });
-    loadAuth();
+    try {
+      await fetch(`${API}/auth/logout`, {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      loadAuth();
+    } catch (err) {
+      showToast(networkErrorMessage(err), 'error');
+    }
   };
 
   const handleAnalyse = async (fullEmail) => {
@@ -547,7 +573,7 @@ export default function App() {
     );
   }
 
-  if (accounts.length === 0) return <div style={S.app}><LoginScreen onLogin={handleAddAccount} /></div>;
+  if (accounts.length === 0) return <div style={S.app}><LoginScreen onLogin={handleAddAccount} /><Toast toast={toast} /></div>;
 
   return (
     <div style={S.app}>

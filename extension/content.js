@@ -92,21 +92,20 @@ function togglePanel(force) {
 
 // ─── Watch Gmail URL ──────────────────────────────────────────────────────────
 function getMsgIdFromUrl() {
-  // Gmail stores message ID in data-message-id as "#msg-f:1234567890"
+  // Gmail stores message ID in data-message-id as "msg-f:1234567890" or "msg-a:1234567890"
   // Convert the decimal number to hex for the Gmail API
   const el = document.querySelector('[data-message-id]');
   if (el) {
     const raw = el.getAttribute('data-message-id');
-    // Format: "#msg-f:1866778946986653534" — extract the decimal number and convert to hex
-    const match = raw.match(/msg-f:(\d+)/);
+    const match = raw.match(/msg-[fa]:(\d+)/);
     if (match) {
       return BigInt(match[1]).toString(16);
     }
   }
 
-  // Fallback: URL hash
+  // Fallback: URL hash — only accept short hex-style IDs (old Gmail format), not new long thread IDs
   const hash = window.location.hash;
-  const urlMatch = hash.match(/#[^/]+\/([A-Za-z0-9]+)$/);
+  const urlMatch = hash.match(/#[^/]+\/([0-9a-f]{8,20})$/i);
   return urlMatch ? urlMatch[1] : null;
 }
 
