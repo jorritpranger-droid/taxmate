@@ -92,12 +92,15 @@ function togglePanel(force) {
 
 // ─── Watch Gmail URL ──────────────────────────────────────────────────────────
 function getMsgIdFromUrl() {
-  // Gmail stores message ID in data-message-id as "msg-f:1234567890" or "msg-a:1234567890"
-  // Convert the decimal number to hex for the Gmail API
-  const el = document.querySelector('[data-message-id]');
-  if (el) {
+  // Gmail stores the real, API-resolvable message ID in data-message-id as "msg-f:1234567890".
+  // "msg-a:" is a different, internal-only Gmail reference — its number does NOT correspond to
+  // a real Gmail API message ID, so trying to resolve it always fails with a 400.
+  // A page can have several [data-message-id] elements (list rows, other messages in a thread,
+  // msg-a: nodes), so scan all of them and use the first genuine msg-f: match, not just the first element.
+  const els = document.querySelectorAll('[data-message-id]');
+  for (const el of els) {
     const raw = el.getAttribute('data-message-id');
-    const match = raw.match(/msg-[fa]:(\d+)/);
+    const match = raw.match(/msg-f:(\d+)/);
     if (match) {
       return BigInt(match[1]).toString(16);
     }
